@@ -1,0 +1,20 @@
+.section-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: 100%;
+   
+    
+
+}
+
+.div-img-logo{
+    width: 200px;
+    height: 200px;
+}
+
+.logo{
+     width: inherit;
+   
+}
