@@ -13,14 +13,13 @@ class Firebase {
       FirebaseApp.firestore()
         .enablePersistence({ synchronizeTabs: true })
         .catch((err) => console.log(err));
-      this.auth = FirebaseApp.auth();
     }
-    
   }
+
   async createUserWithEmailAndPassword(user, url) {
     const data = {};
-    
-    await new Promise((resolve, reject) => {
+
+    return await new Promise((resolve, reject) => {
       this.auth
         .createUserWithEmailAndPassword(user.EMAIL, user.PASSWORD)
         .then((res) => {
@@ -37,7 +36,7 @@ class Firebase {
             displayName: user.name,
             photoURL: user.photoURL,
           });
-          
+
         })
         .catch((error) => {
           switch (error.code) {
@@ -50,7 +49,82 @@ class Firebase {
         });
     });
   };
-      
+
+  async loginMail(user) {
+    return await new Promise((resolve, reject) => {
+      console.log(user.EMAIL);
+      this.auth.signInWithEmailAndPassword(user.EMAIL, user.PASSWORD)
+        .then(() => {
+          this.getDocument('user', user.EMAIL)
+            .then((data) => {
+              document.cookie = `EMAIL=${data.EMAIL}`;
+              document.cookie = `name=${data.name}`;
+              document.cookie = `id=${data.uid}`;
+              document.cookie = `photoURL=${data.photoURL}`;
+              window.location.href = '/';
+            });
+        })
+        .catch((error) => {
+          switch (error.code) {
+            case 'auth/wrong-password':
+              reject(new Error('La contraseña no es válida o el usuario no tiene una contraseña'));
+              break;
+            default:
+              reject(new Error(error));
+          }
+        });
+    });
+  }
+
+  async loginGoogle() {
+    const data = {};
+   return FirebaseApp.auth()
+      .signInWithPopup(new FirebaseApp.auth.GoogleAuthProvider())
+      .then((res) => {
+        data.photoURL = res.user.photoURL;
+        data.name = res.user.displayName;
+        data.uid = res.user.uid;
+        data.id = res.user.email;
+        data.EMAIL = res.user.email;
+        this.createSet('user', data);
+        document.cookie = `EMAIL=${data.EMAIL}`;
+        document.cookie = `name=${data.name}`;
+        document.cookie = `id=${data.uid}`;
+        document.cookie = `photoURL=${data.photoURL}`;
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  async loginFacebook() {
+    const data = {};
+    return this.auth
+      .signInWithPopup(new FirebaseApp.auth.FacebookAuthProvider())
+      .then((res) => {
+        data.photoURL = res.user.photoURL;
+        data.name = res.user.displayName;
+        data.uid = res.user.uid;
+        data.id = res.user.email;
+        data.EMAIL = res.user.email;
+        this.createSet('user', data);
+        document.cookie = `EMAIL=${data.EMAIL}`;
+        document.cookie = `name=${data.name}`;
+        document.cookie = `id=${data.uid}`;
+        document.cookie = `photoURL=${data.photoURL}`;
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async signOut() {
+    this.auth.signOut().catch((e) => console.error(e));
+  }
+
+
 }
 
 const FirebaseContext = createContext(null);
