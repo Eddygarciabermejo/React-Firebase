@@ -4,7 +4,6 @@ import { Firebase } from '../Firebase';
 
 import '../assets/styles/container/signup.css'
 import Logo from '../componets/Logo'
-import { Link } from 'react-router-dom';
 
 const SignUp = (props) => {
 
@@ -17,33 +16,34 @@ const SignUp = (props) => {
             ...form,
             [event.target.name]: event.target.value,
         });
-        console.log(form)
     };
 
     const handlSubmit = (event) => {
         event.preventDefault(); //quitar el defecto del comportamiento de un formulario
-        Firebase.prototype.createUserWithEmailAndPassword(form, '/prueba')
+        Firebase.prototype.createUserWithEmailAndPassword(form, 'https://bidder-712c3.firebaseapp.com')
             .then(() => {
-            console.log('formulario registrado con exito.')
-            props.history.push('/login');// rediriges a la pagina que quiero que se muestre si el formulario fue efectivo.
+                console.log('formulario registrado con exito.')
+                props.history.push('/languaje');// rediriges a la pagina que quiero que se muestre si el formulario fue efectivo.
             })
             .catch(() => {
-            console.log('algo salio mal')
-        })
+                console.log('algo salio mal')
+            })
         // Ejecutar el registro de auth para usuerio
     };
 
     const LoginGoogle = () => {
-
         Firebase.prototype.loginGoogle()
-        .then(() => {
-    
-            console.log('se cumplio login con google')
-           // props.history.push('/home');//para donde me envia si se cumple el logeo
-        })
-        .catch(()=> {
-            console.log('Alejo tiene mal genio')
-        })
+            .then((res) => {
+                props.history.push('/languaje')
+            })
+            .catch((e) => console.log(e))
+    }
+    const LoginFacebook = () => {
+        Firebase.prototype.loginFacebook()
+            .then((res) => {
+                props.history.push('/languaje')
+            })
+            .catch((e) => console.log(e))
     }
     return (
 
@@ -52,21 +52,27 @@ const SignUp = (props) => {
             <form onSubmit={handlSubmit}>
                 <div className="div-inputssing">
                     <div className="div-spansigsig">
+                        <span className="labelsing">Name:</span>
+                    </div>
+                    <input type="text" name="name" id="" onChange={handleInput} required/>
+                </div>
+                <div className="div-inputssing">
+                    <div className="div-spansigsig">
                         <span className="labelsing">E-mail:</span>
                     </div>
-                    <input type="text" name="EMAIL" id="" onChange={handleInput} />
+                    <input type="email" name="EMAIL" id="" onChange={handleInput} required/>
                 </div>
                 <div className="div-inputssing">
                     <div className="div-spansig">
                         <span className="labelsing">Password:</span>
                     </div>
-                    <input type="text" name="PASSWORD" id="" onChange={handleInput} />
+                    <input minLength='6' type="password" name="PASSWORD" id="" onChange={handleInput} required />
                 </div>
                 <div className="div-inputssing">
                     <div className="div-spansig">
                         <span className="labelsing">Repeat Password:</span>
                     </div>
-                    <input type="text" name="" id="" onChange={handleInput} />
+                    <input minLength='6' type="password" name="" id="" onChange={handleInput} required />
                 </div>
                 <div className="div-inputssing">
                     <div className="div-spansig">
@@ -89,6 +95,7 @@ const SignUp = (props) => {
                 </div>
             </form>
             <button type='button' onClick={() => LoginGoogle()}>Google</button>
+            <button type='button' onClick={() => LoginFacebook()}>Facebook</button>
         </section>
     )
 }
