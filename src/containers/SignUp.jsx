@@ -34,9 +34,15 @@ const SignUp = (props) => {
     };
 
     const LoginGoogle = () => {
-        Firebase.prototype.loginGoogle().then(() => {
+
+        Firebase.prototype.loginGoogle()
+        .then(() => {
+    
             console.log('se cumplio login con google')
-            props.history.push('/home');//para donde me envia si se cumple el logeo
+           // props.history.push('/home');//para donde me envia si se cumple el logeo
+        })
+        .catch(()=> {
+            console.log('Alejo tiene mal genio')
         })
     }
     return (

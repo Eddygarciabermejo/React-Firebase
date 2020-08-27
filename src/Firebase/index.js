@@ -91,7 +91,7 @@ class Firebase {
         document.cookie = `name=${data.name}`;
         document.cookie = `id=${data.uid}`;
         document.cookie = `photoURL=${data.photoURL}`;
-        window.location.href = '/';
+      
       })
       .catch((error) => {
         console.log(error);
