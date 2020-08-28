@@ -152,11 +152,13 @@ class Firebase {
   };
 
   async loginMail(user) {
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       FirebaseApp.auth().signInWithEmailAndPassword(user.EMAIL, user.PASSWORD)
         .then(() => {
           this.getDocument('user', user.EMAIL)
             .then((data) => {
+              console.log('ok')
+              resolve(data)
               document.cookie = `bidder=${JSON.stringify(data)}; max-age=3600; path=/`;
             });
         })
