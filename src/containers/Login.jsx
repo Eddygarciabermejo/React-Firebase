@@ -21,7 +21,6 @@ const Login = (props) => {
         event.preventDefault(); //quitar el defecto del comportamiento de un formulario
         Firebase.prototype.loginMail(form)
             .then(() => {
-                console.log('formulario registrado con exito.')
                 props.history.push('/home');// rediriges a la pagina que quiero que se muestre si el formulario fue efectivo.
             })
             .catch(() => {
@@ -54,8 +53,7 @@ const Login = (props) => {
                     </div>
                     <input type="text" name="EMAIL" id="" onChange={handleInput} />
                 </div>
-
-                <div class="div-inputs-login">
+                <div className="div-inputs-login">
                     <div className="div-span-login">
                         <span className="labelsapan">Password:</span>
                     </div>
